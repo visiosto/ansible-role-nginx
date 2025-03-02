@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "plugins": ["prettier-plugin-nginx", "prettier-plugin-packagejson"],
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false,
+  "proseWrap": "always",
+  "overrides": [
+    {
+      "files": "*.conf",
+      "options": {
+        "parser": "nginx",
+        "alignDirectives": true,
+        "alignUniversally": false,
+        "wrapParameters": true,
+        "continuationIndent": 2
+      }
+    }
+  ]
+}
