@@ -14,7 +14,7 @@
   "license": "MIT",
   "author": "Visiosto oy <visiosto@visiosto.fi> (https://www.visiosto.fi)",
   "scripts": {
-    "format": "prettier --write \"**/*.{conf,json,md}\""
+    "format": "prettier --write \"**/*.{conf,json,md,types}\""
   },
   "devDependencies": {
     "prettier": "^3.5.2",
