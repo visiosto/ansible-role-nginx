@@ -14,7 +14,7 @@
   "license": "MIT",
   "author": "Visiosto oy <visiosto@visiosto.fi> (https://www.visiosto.fi)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write \"**/*.{conf,json,md}\""
   },
   "devDependencies": {
     "prettier": "^3.5.2",
