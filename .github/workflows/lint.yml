@@ -22,11 +22,11 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Install nginx-lint
-        run: pip install nginx-lint
+      - name: Install Gixy
+        run: pip install gixy-ng
 
-      - name: Run nginx-lint
-        run: nginx-lint files/**/*.conf files/**/*.types
+      - name: Run Gixy
+        run: gixy files/**/*.conf files/**/*.types
 
       - name: Check the Nginx configuration
         run: sudo nginx -t -c files/nginx.conf
