@@ -26,7 +26,7 @@ jobs:
         run: pip install gixy-ng
 
       - name: Run Gixy
-        run: gixy files/**/*.conf files/**/*.types
+        run: gixy files/nginx.conf
 
       - name: Check the Nginx configuration
         run: sudo nginx -t -c files/nginx.conf
