@@ -30,6 +30,3 @@ jobs:
 
       - name: Check the Nginx configuration
         run: sudo nginx -t -c files/nginx.conf
-        shell: bash
-        env:
-          NGINX_CONF_DIR: files
