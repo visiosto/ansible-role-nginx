@@ -1,6 +1,7 @@
 ---
 - name: Install Nginx
-  ansible.builtin.include_role: nginxinc.nginx
+  ansible.builtin.include_role:
+    name: nginxinc.nginx
 
 - name: Ensure site directory exists
   ansible.builtin.file:
