@@ -22,7 +22,7 @@ jobs:
       - name: Generate a certficate to silence errors
         run: |
           mkdir -p ${GITHUB_WORKSPACE}/files/certs
-          openssl req -new -newkey rsa:4096 -x509 -days 365 -keyout ${GITHUB_WORKSPACE}/files/certs/default.pem -out ${GITHUB_WORKSPACE}/files/certs/default.crt -nodes -subj "/CN=localhost"
+          openssl req -new -newkey rsa:4096 -x509 -days 365 -keyout ${GITHUB_WORKSPACE}/files/certs/default.key -out ${GITHUB_WORKSPACE}/files/certs/default.crt -nodes -subj "/CN=localhost"
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
