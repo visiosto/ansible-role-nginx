@@ -1,19 +1,6 @@
 ---
-- name: Add Nginx APT key
-  ansible.builtin.apt_key:
-    url: "https://nginx.org/keys/nginx_signing.key"
-    state: present
-
-- name: Add Nginx PPA
-  ansible.builtin.apt_repository:
-    repo: "{{ nginx_ppa }}"
-    update_cache: true
-
 - name: Install Nginx
-  ansible.builtin.apt:
-    name: "{{ nginx_package }}"
-    state: "{{ nginx_package_state | default(apt_package_state) }}"
-    update_cache: true
+  ansible.builtin.include_role: nginxinc.nginx
 
 - name: Ensure site directory exists
   ansible.builtin.file:
@@ -56,32 +43,26 @@
     src: "files/nginx.conf"
     dest: "{{ nginx_path }}/nginx.conf"
     mode: "0644"
-  notify: nginx_restart
+  notify: (Handler) Run NGINX
 
 - name: Create the MIME types
   ansible.builtin.copy:
     src: "files/mime.types"
     dest: "{{ nginx_path }}/mime.types"
     mode: "0644"
-  notify: nginx_restart
+  notify: (Handler) Run NGINX
 
 - name: Copy the configuration snippets
   ansible.builtin.copy:
     src: files/snippets
     dest: "{{ nginx_path }}"
     mode: "0755"
-  notify: nginx_restart
+  notify: (Handler) Run NGINX
 
 - name: Copy the default site
   ansible.builtin.copy:
     src: "files/conf.d/default.conf"
     dest: "{{ nginx_sites_path }}"
     mode: "0755"
-  notify: nginx_restart
-
-- name: Enable Nginx
-  ansible.builtin.service:
-    name: nginx
-    enabled: true
-    state: started
+  notify: (Handler) Run NGINX
 # vi: ft=yaml.ansible
