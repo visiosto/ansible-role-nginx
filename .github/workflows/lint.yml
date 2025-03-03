@@ -34,6 +34,4 @@ jobs:
         run: gixy files/nginx.conf
 
       - name: Check the Nginx configuration
-        run:
-          sudo nginx -t -c ${GITHUB_WORKSPACE}/files/nginx.conf -p
-          ${GITHUB_WORKSPACE}/files
+        run: sudo nginx -t -p ${GITHUB_WORKSPACE}/files
