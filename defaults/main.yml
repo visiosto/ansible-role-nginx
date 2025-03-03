@@ -1,0 +1,12 @@
+---
+nginx_ppa:
+  "deb http://nginx.org/packages/mainline/debian {{ ansible_distribution_release
+  }} nginx"
+nginx_package: nginx
+nginx_package_state: present
+nginx_path: /etc/nginx
+nginx_sites_path: "{{ nginx_path }}/conf.d"
+nginx_ssl_path: "{{ nginx_path }}/certs"
+nginx_ssl_default_key: "{{ nginx_ssl_path }}/default.key"
+nginx_ssl_default_certificate: "{{ nginx_ssl_path }}/default.crt"
+# vi: ft=yaml.ansible

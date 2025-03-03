@@ -1,0 +1,87 @@
+---
+- name: Add Nginx APT key
+  ansible.builtin.apt_key:
+    url: "https://nginx.org/keys/nginx_signing.key"
+    state: present
+
+- name: Add Nginx PPA
+  ansible.builtin.apt_repository:
+    repo: "{{ nginx_ppa }}"
+    update_cache: true
+
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: "{{ nginx_package }}"
+    state: "{{ nginx_package_state | default(apt_package_state) }}"
+    update_cache: true
+
+- name: Ensure site directory exists
+  ansible.builtin.file:
+    path: "{{ nginx_sites_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure the certificates directory exists
+  ansible.builtin.file:
+    path: "{{ nginx_ssl_path }}"
+    state: directory
+    mode: "0700"
+
+- name: Generate the default key
+  community.crypto.openssl_privatekey:
+    path: "{{ nginx_ssl_default_key }}"
+    size: 4096
+    mode: "0600"
+    type: RSA
+    state: present
+
+- name: Create certificate signing request (CSR) for default certificate
+  community.crypto.openssl_csr_pipe:
+    privatekey_path: "{{ nginx_ssl_default_key }}"
+    common_name: _
+    organization_name: Visiosto oy
+  register: csr
+
+- name: Generate a self-signed SSL/TLS certificate (valid for 10 years)
+  community.crypto.x509_certificate:
+    path: "{{ nginx_ssl_default_certificate }}"
+    privatekey_path: "{{ nginx_ssl_default_key }}"
+    csr_content: "{{ csr.csr }}"
+    provider: selfsigned
+    selfsigned_not_after: "+3650d"
+    mode: "0644"
+
+- name: Create the Nginx configuration
+  ansible.builtin.copy:
+    src: "files/nginx.conf"
+    dest: "{{ nginx_path }}/nginx.conf"
+    mode: "0644"
+  notify: nginx_restart
+
+- name: Create the MIME types
+  ansible.builtin.copy:
+    src: "files/mime.types"
+    dest: "{{ nginx_path }}/mime.types"
+    mode: "0644"
+  notify: nginx_restart
+
+- name: Copy the configuration snippets
+  ansible.builtin.copy:
+    src: files/snippets
+    dest: "{{ nginx_path }}"
+    mode: "0755"
+  notify: nginx_restart
+
+- name: Copy the default site
+  ansible.builtin.copy:
+    src: "files/conf.d/default.conf"
+    dest: "{{ nginx_sites_path }}"
+    mode: "0755"
+  notify: nginx_restart
+
+- name: Enable Nginx
+  ansible.builtin.service:
+    name: nginx
+    enabled: true
+    state: started
+# vi: ft=yaml.ansible
